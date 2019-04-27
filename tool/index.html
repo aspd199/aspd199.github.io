@@ -1,0 +1,127 @@
+<script src="http://code.jquery.com/jquery-1.4.1.min.js" type="text/javascript"></script>
+<script src="md5.js" type="text/javascript"></script>
+
+<script>
+
+var $params = (function(){
+    var url = window.document.location.href.toString();
+    var u = url.split("?");
+    if(typeof(u[1]) == "string"){
+        u = u[1].split("&");
+        var get = {};
+        for(var i in u){
+            var j = u[i].split("=");
+            get[j[0]] = j[1];
+        }
+        return get;
+    } else {
+        return {};
+    }
+})();
+
+
+$params.app_id='2115867496';
+$params.image=getBase64("http://pic.eastlady.cn/uploads/tp/201707/9999/2ceb09803f.jpg");
+$params.nonce_str=Math.random();
+$params.session_id=new Date().getTime();
+$params.sign='';
+$params.time_stamp=new Date().getTime();
+app_key='zSZ9hlfHC6VhvhUA';
+alert($params.image);
+
+$str="app_id="+$params.app_id;
+$str=$str+"&image="+$params.image;
+$str=$str+"&nonce_str="+$params.nonce_str;
+$str=$str+"&session_id="+$params.session_id;
+$str=$str+"&time_stamp="+$params.time_stamp;
+$str=$str+"&app_key="+app_key;
+
+$params.sign=hex_md5($str).toUpperCase();
+
+$str="app_id="+$params.app_id;
+$str=$str+"&image="+$params.image;
+$str=$str+"&nonce_str="+$params.nonce_str;
+$str=$str+"&session_id="+$params.session_id;
+$str=$str+"&time_stamp="+$params.time_stamp;
+$str=$str+"&sign="+$params.sign;
+
+alert(JSON.stringify($params));
+
+var fnSucceed;
+var fnFail;
+var fnLoading;
+//$.post("https://api.ai.qq.com/fcgi-bin/vision/vision_imgtotext", { id: idValue }, function (text, status) { alert(text); });
+//ajaxPost ( "https://api.ai.qq.com/fcgi-bin/vision/vision_imgtotext" , $str , fnSucceed , fnFail , fnLoading );
+alert(fnSucceed);
+
+
+function getBase64(url) {
+    var canvas = document.createElement("canvas");   //创建canvas DOM元素
+    var ctx = canvas.getContext("2d");
+    var img = new Image;
+    img.crossOrigin = 'Anonymous';
+    img.src = url;
+    img.onload = function () {
+    alert(img.width);
+        canvas.width = img.width; //指定画板的宽度，自定义
+        canvas.height = img.height; //指定画板的高度,自定义
+        ctx.drawImage(img, 0, 0, img.width, img.height); //参数可自定义
+        var dataURL = canvas.toDataURL("image/" + getEXT(url));
+        canvas = null;
+        return dataURL; //回掉函数获取Base64编码
+    };
+}
+
+
+function getEXT(str){
+    return str.substring(str.lastIndexOf("."),str.length);
+}
+// ajax 对象
+function ajaxObject() {
+    var xmlHttp;
+    try {
+        // Firefox, Opera 8.0+, Safari
+        xmlHttp = new XMLHttpRequest();
+        } 
+    catch (e) {
+        // Internet Explorer
+        try {
+                xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+            try {
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (e) {
+                alert("您的浏览器不支持AJAX！");
+                return false;
+            }
+        }
+    }
+    return xmlHttp;
+}
+ 
+// ajax post请求：
+function ajaxPost ( url , data , fnSucceed , fnFail , fnLoading ) {
+    var ajax = ajaxObject();
+    ajax.open( "post" , url , true );
+    ajax.setRequestHeader( "Content-Type" , "application/x-www-form-urlencoded" );
+    ajax.onreadystatechange = function () {
+        if( ajax.readyState == 4 ) {
+            if( ajax.status == 200 ) {
+                fnSucceed( ajax.responseText );
+                alert(ajax.responseText);
+
+            }
+            else {
+                fnFail( "HTTP请求错误！错误码："+ajax.status );
+            }
+        }
+        else {
+            fnLoading();
+        }
+    }
+    ajax.send( data );
+ 
+}
+
+</script>
+
