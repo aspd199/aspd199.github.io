@@ -2477,7 +2477,7 @@ var personFrameText = new PIXI.Text();
 app.stage.addChild(personFrame);
 personFrame.addChild(personFrameText);
 personFrame.position.set(530,230);
-personFrame.lineStyle(30, colorHex(128,96,0), 1);
+personFrame.lineStyle(30, colorHex(232,102,160), 1);
 
 
 personFrame.moveTo(-borderSize, -borderSize);
@@ -2487,11 +2487,11 @@ personFrame.lineTo(-borderSize, borderSize);
 personFrame.lineTo(-borderSize, -borderSize);
 
 //personFrame.drawRoundedRect(-40-5,borderSize-40-5,80+10,80+10,50);//bug
-personFrame.beginFill(colorHex(128,96,0),1);
+personFrame.beginFill(colorHex(232,102,160),1);
 personFrame.lineStyle(0);
 personFrame.drawRoundedRect(-40,borderSize-25,80,50,10);
 personFrame.endFill();
-personFrame.lineStyle(20, colorHex(158,140,0), 1);
+personFrame.lineStyle(28, colorHex(255,171,209), 1);
 
 personFrame.moveTo(-borderSize, -borderSize);
 personFrame.lineTo(borderSize, -borderSize);
