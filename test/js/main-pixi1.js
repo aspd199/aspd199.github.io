@@ -1,6 +1,6 @@
 var app = new PIXI.Application(1060, 760, {forceFXAA: true,antialias:true,backgroundColor: colorHex(255,250,240)});//0x1099bb
 PIXI.settings.ROUND_PIXELS = true; PIXI.settings.RESOLUTION = 1;
-app.view.innerHTML = "Tompin 到处黑屁，你也不至于用如此旧的浏览器吧？";
+app.view.innerHTML = "你也不至于用如此旧的浏览器吧？";
 app.view.style = "position: fixed;left:0px; top:0px;cursor:default;"
 document.body.appendChild(app.view);
 if ("onmousewheel" in document) {
@@ -2519,7 +2519,7 @@ personFrameText.style = new PIXI.TextStyle({
     'padding' : 5,
     'fontWeight' : 'bolder'
 });
-personFrameText.text = '幻拐';
+personFrameText.text = '哈哈';
 
 uiBottomGraphics.lineStyle(30, 0xffffff, 1);
 uiBottomGraphics.moveTo(530-borderSize, 230-borderSize);uiBottomGraphics.lineTo(530+borderSize, 230-borderSize);uiBottomGraphics.lineTo(530+borderSize, 230+borderSize);uiBottomGraphics.lineTo(530-borderSize, 230+borderSize);uiBottomGraphics.lineTo(530-borderSize, 230-borderSize);
@@ -2579,7 +2579,7 @@ app.stage.addChild(textBigL); app.stage.addChild(textBigR); app.stage.addChild(t
 textBigL.anchor.set(0.5); textBigR.anchor.set(0.5); textTop.anchor.set(0.5);
 textBigL.style = bigTextStyle; textBigR.style = bigTextStyle; textTop.style = topTextStyle;
 textBigL.position.set(85,245); textBigR.position.set(975,245); textTop.position.set(530,29);
-textBigL.text = "超\n越\n德\n文"; textBigR.text = "黑\n屁\n无\n罪"; textTop.text = "屁黑妙奇的拼通";
+textBigL.text = "哈\n哈\n哈\n哈"; textBigR.text = "哈\n哈\n哈\n哈"; textTop.text = "哈哈哈哈";
 
 var pooArr = new Array(), pooArrTmp = new Array();
 function PooParticle(x, y){
@@ -2677,7 +2677,7 @@ WaveSettingWindow = new UiWaveSettings(eqGraphX,eqGraphY,eqGraphW,eqGraphH);
 
 var LevelMeter = new UiLevelMeter(LevelX,LevelY,LevelW,LevelH);
 //Interactive UI
-var buttonHelp = new Button(10,710,160,40,5,"鸣谢",buttonShowHelpAction, true);
+var buttonHelp = new Button(10,710,160,40,5,"哈哈",buttonShowHelpAction, true);
 var buttonSelect = new Button(175,710,160,40,5,"载入音频",buttonSelectAction,true);
 var sliderSmooth = WaveSettingWindow.UiControls["sliderSmooth"];
 var sliderMinDecibels = WaveSettingWindow.UiControls["sliderMinDecibels"];
@@ -2823,11 +2823,11 @@ function InitMusic()
     if(Music === undefined){
         Howler.usingWebAudio = true;
         // BGM 列表，随机抽取
-        let bgmList = ['Bad Apple!!.m4a', '爱杀宝贝 Ed ふたりのきもちのほんとのひみつ.mp3'];
+        let bgmList = ['Bad Apple!!.m4a', '爱杀宝贝 Ed ふたりのきもちのほんとのひみつ.mp3', '爱杀宝贝 Ed 福利版 60分钟.mp3'];
         let bgm = bgmList[Math.floor(Math.random() * bgmList.length)];
         console.log(`BGM: ${bgm}`);
         Music = new Howl({
-            src: [`bgm/${bgm}`],
+            src: [`./bgm/${bgm}`],
             autoplay: false,
             loop: false,
             onload: function(){
@@ -2969,8 +2969,8 @@ function InitMusic()
 function buttonShowHelpAction()
 {
     thanksImage.visible = !thanksImage.visible;
-    if (thanksImage.visible) buttonHelp.text.text = "鸣谢";
-    else buttonHelp.text.text = "鸣谢";
+    if (thanksImage.visible) buttonHelp.text.text = "哈哈";
+    else buttonHelp.text.text = "哈哈";
 }
 
 function ResetSideChainTime(){
@@ -3249,6 +3249,3 @@ function GetVolume(BufferArray,channel,AudioProcesser){
     delete x;
     delete sum;
 }
-
-console.log("%c欢迎来到俄苏维基动感灵堂！"," color: #d00; font-family: Microsoft Yahei; font-weight:bolder; text-shadow: 0 1px 0 #ccc,0 2px 0 #c9c9c9,0 3px 0 #bbb,0 4px 0 #b9b9b9,0 5px 0 #aaa,0 6px 1px rgba(0,0,0,.1),0 0 5px rgba(0,0,0,.1),0 1px 3px rgba(0,0,0,.3),0 3px 5px rgba(0,0,0,.2),0 5px 10px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.2),0 20px 20px rgba(0,0,0,.15);font-size:8em");
-console.log("%cIshisashi 修改。在此感谢原作者。"," color: #fff; background-image:repeating-linear-gradient(-50deg, #000, #000 5px, #666 5px, #666 10px);padding:0.5em");
