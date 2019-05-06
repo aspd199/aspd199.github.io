@@ -2491,7 +2491,7 @@ personFrame.beginFill(colorHex(232,102,160),1);
 personFrame.lineStyle(0);
 personFrame.drawRoundedRect(-40,borderSize-25,80,50,10);
 personFrame.endFill();
-personFrame.lineStyle(28, colorHex(255,171,209), 1);
+personFrame.lineStyle(20, colorHex(255,171,209), 1);
 
 personFrame.moveTo(-borderSize, -borderSize);
 personFrame.lineTo(borderSize, -borderSize);
