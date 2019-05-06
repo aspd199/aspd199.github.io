@@ -2823,7 +2823,7 @@ function InitMusic()
     if(Music === undefined){
         Howler.usingWebAudio = true;
         // BGM 列表，随机抽取
-        let bgmList = ['爱杀宝贝 Ed ふたりのきもちのほんとのひみつ.mp3', '爱杀宝贝 Ed 福利版 60分钟.mp3'];
+        let bgmList = ['Bad Apple!!.m4a', '爱杀宝贝 Ed ふたりのきもちのほんとのひみつ.mp3', '爱杀宝贝 Ed 福利版 60分钟.mp3'];
         let bgm = bgmList[Math.floor(Math.random() * bgmList.length)];
         console.log(`BGM: ${bgm}`);
         Music = new Howl({
