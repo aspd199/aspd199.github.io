@@ -2519,7 +2519,7 @@ personFrameText.style = new PIXI.TextStyle({
     'padding' : 5,
     'fontWeight' : 'bolder'
 });
-personFrameText.text = '幻拐';
+personFrameText.text = '哈哈';
 
 uiBottomGraphics.lineStyle(30, 0xffffff, 1);
 uiBottomGraphics.moveTo(530-borderSize, 230-borderSize);uiBottomGraphics.lineTo(530+borderSize, 230-borderSize);uiBottomGraphics.lineTo(530+borderSize, 230+borderSize);uiBottomGraphics.lineTo(530-borderSize, 230+borderSize);uiBottomGraphics.lineTo(530-borderSize, 230-borderSize);
@@ -2827,7 +2827,7 @@ function InitMusic()
         let bgm = bgmList[Math.floor(Math.random() * bgmList.length)];
         console.log(`BGM: ${bgm}`);
         Music = new Howl({
-            src: [`bgm/${bgm}`],
+            src: [`../bgm/${bgm}`],
             autoplay: false,
             loop: false,
             onload: function(){
