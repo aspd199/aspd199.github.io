@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta http-equiv="Accept" content="text/plant; application/text;">
+<meta http-equiv="Content-Type" content="application/json;">
+<script src="md5.js" type="text/javascript"></script>
+<script>
+function clear()
+{
+  document.open();
+  document.close();
+  var url = window.document.location.href.toString();
+  var u = url.substring(url.lastIndexOf("?")+1)
+  document.write(hex_md5(u));
+}
+</script>
+</head>
+<body onload="clear()"></body>
+</html>
