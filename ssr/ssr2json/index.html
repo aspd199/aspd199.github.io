@@ -30,7 +30,7 @@
 
   .inputArea {
     margin: auto;
-    width: 100%;
+    width: 50%;
   }
 
   .tip {
@@ -169,15 +169,23 @@
 <body>
   <div class="nav">
     <span>ssr/ss/订阅地址/base64批量转JSON</span>
-    <span><a href="//github.com/html50/ssr2jsonBat">Github</a><span>
+    <span>ssr<span>
     </div>
 
 
     <div class="app">
 
-      <div class="outputArea">
+      <div class="inputArea">
         <label class="tip">在这里粘贴多行ss/ssr，或订阅地址。批量地址用换行分割。</label>
         <textarea id="input" autofocus="true"></textarea>
+      </div>
+
+      <div class="buttonArea">
+        <button class="copyBtn" id="copy">复制</button>
+      </div>
+      <div class="inputArea">
+        <label class="tip">在这里粘贴多行ss/ssr，或订阅地址。批量地址用换行分割。</label>
+        <textarea id="output" autofocus="true"></textarea>
       </div>
 
       <div class="buttonArea">
