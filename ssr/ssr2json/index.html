@@ -24,13 +24,13 @@
 
   .app {
     margin: auto;
-    width: 50vw;
+    width: 80vw;
     padding: 50px;
   }
 
   .inputArea {
     margin: auto;
-    width: 50%;
+    width: 45%;
   }
 
   .tip {
@@ -175,22 +175,15 @@
 
     <div class="app">
 
-      <div class="inputArea">
-        <label class="tip">在这里粘贴多行ss/ssr，或订阅地址。批量地址用换行分割。</label>
+      <div class="inputArea" style="float:left;">
+        <label id="tip1" class="tip">在这里粘贴多行ss/ssr，或订阅地址。批量地址用换行分割。</label>
         <textarea id="input" autofocus="true"></textarea>
       </div>
-
-      <div class="buttonArea">
-        <button class="copyBtn" id="copy">复制</button>
-      </div>
-      <div class="inputArea">
-        <label class="tip">在这里粘贴多行ss/ssr，或订阅地址。批量地址用换行分割。</label>
+      <div class="inputArea" style="float:right;">
+        <label id="tip2" class="tip">在这里粘贴json格式ssr。</label>
         <textarea id="output" autofocus="true"></textarea>
       </div>
 
-      <div class="buttonArea">
-        <button class="copyBtn" id="copy">复制</button>
-      </div>
     </div>
 
     <div class="checkAnimation">
@@ -200,11 +193,14 @@
     <script src="base64.js"></script>
     <script src="axios.min.js"></script>
     <script>
-      var tip = document.querySelector('.tip'),
+      var tip1 = document.querySelector('#tip1'),
+      err = 0,result ="";
+      var tip2 = document.querySelector('#tip2'),
       err = 0,result ="";
 
       window.onload = function(){
-        tip.classList.add('hasFocused')
+        tip1.classList.add('hasFocused');
+        tip2.classList.add('hasFocused')
       }
 
 
@@ -212,43 +208,95 @@
 input.addEventListener('input',function(){
   var text = input.value.trim();
 
-  if(text.startsWith('ssr://') || text.startsWith('ss://')){
+  if(text===""){
+    tip1.innerHTML = '在此粘贴ssr/ss/base64/订阅地址'
+    tip1.classList.remove('error')
+    input.classList.remove('error')
+  }else if(text.startsWith('ssr://') || text.startsWith('ss://')){
     multiSS(text)
   }else if(text.startsWith('http')){
     http(text)
-  }else if(isBase64(text)){
+  }else if(isBase642(text)){
     subscription(text)
-  }else if(text===""){
-    tip.innerHTML = '在此粘贴ssr/ss/base64/订阅地址'
-    tip.classList.remove('error')
-    input.classList.remove('error')
   }else{
-    tip.innerHTML = '请粘贴正确的ssr/ss/base64/订阅地址'
-    tip.classList.add('error')
+    tip1.innerHTML = '请粘贴正确的ssr/ss/base64/订阅地址'
+    tip1.classList.add('error')
     input.classList.add('error')
   }
 })
 
+output.addEventListener('input',function(){
+  var text = output.value.trim();
 
-  //input获得失去焦点
-  input.addEventListener('focus',function(){
-    tip.classList.add('hasFocused')
-  })
-
-  input.addEventListener('blur',function(){
-    if(this.value===''){
-      tip.classList.remove('hasFocused')
+  if(text===""){
+    tip2.innerHTML = '在此粘贴ssr的json'
+    tip2.classList.remove('error')
+    output.classList.remove('error')
+  }else if(isJSON(text)){
+    var ssr=JSON.parse(text);
+console.log(ssr.length);
+    var result = '';
+    for(i=0;i<ssr.length;i++){
+        temp = ssr[i].server + ':';
+        temp += ssr[i].server_port + ':';
+        temp += ssr[i].protocol + ':';
+        temp += ssr[i].method + ':';
+        temp += ssr[i].obfs + ':';
+        asyncToBase64(ssr[i].password,'utf8',function(data){
+          temp += data + '/?';
+        },
+        function(err){
+          tip2.innerHTML = 'password encode: '+err;
+        });
+        temp += 'obfsparam=' + ssr[i].obfsparam + '&';
+        asyncToBase64(ssr[i].remarks,'utf8',function(data){
+          temp += 'remarks=' + data + '&';
+        },
+        function(err){
+          tip2.innerHTML = 'remarks encode: '+err;
+        });
+        asyncToBase64(ssr[i].group,'utf8',function(data){
+          temp += 'group=' + data;
+        },
+        function(err){
+          tip2.innerHTML = 'group encode: '+err;
+        });
+        asyncToBase64(temp,'utf8',function(data){
+          result += 'ssr://' + data.replace(/=/g,'') + '\n';
+        },
+        function(err){
+          tip2.innerHTML = 'ssr encode: '+err;
+        });
     }
-  })
+    output.value = result;
+  }else{
+    tip2.innerHTML = '请粘贴正确的json'
+    tip2.classList.add('error')
+    output.classList.add('error')
+  }
+})
 
-  //复制按钮
-  copy.addEventListener('click',function(){
-    if(input.textLength!==0){
-      selectAll();
-      document.execCommand('copy');
-      showCheck();
-    }
-  })
+//input获得失去焦点
+input.addEventListener('focus',function(){
+  tip1.classList.add('hasFocused')
+})
+
+input.addEventListener('blur',function(){
+  if(this.value===''){
+    tip1.classList.remove('hasFocused')
+  }
+})
+
+//output获得失去焦点
+output.addEventListener('focus',function(){
+  tip2.classList.add('hasFocused')
+})
+
+output.addEventListener('blur',function(){
+  if(this.value===''){
+    tip2.classList.remove('hasFocused')
+  }
+})
 
   function http(text){
     axios.get(text)
@@ -289,10 +337,10 @@ function multiSS(text){
     else {err++;console.log('失败：',i)}
     }
 
-    tip.innerHTML = '解析完成!共'+len+'条记录,成功转换'+(len-err)+'条';
-    tip.classList.remove('error');
+    tip1.innerHTML = '解析完成!共'+len+'条记录,成功转换'+(len-err)+'条';
+    tip1.classList.remove('error');
     input.classList.remove('error');
-    input.value = result.slice(0,result.length-1)
+    input.value = '[' + result.slice(0,result.length-1) + ']'
   }
 
 
@@ -318,10 +366,10 @@ function ssrDecode(text){
 
     asyncFromBase64(arr2[0],'utf8',function(data){
       password=data;
-        asyncFromBase64(arr3[1].split('=')[1],'utf8',function(data){
-          remarks=data;
-            asyncFromBase64(arr3[2].split('=')[1],'utf8',function(data){
-              group=data;
+      asyncFromBase64(arr3[1].split('=')[1],'utf8',function(data){
+        remarks=data;
+        asyncFromBase64(arr3[2].split('=')[1],'utf8',function(data){
+          group=data;
       result += `{
   "server": "${ip}",
   "server_port": "${port}",
@@ -408,8 +456,24 @@ var base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=)
   return false
 }
 
+//判断是不是json
+function isJSON(str) {
+    if (typeof str == 'string') {
+        try {
+            var obj=JSON.parse(str);
+            if(typeof obj == 'object' && obj ){
+                return true;
+            }else{
+                return false;
+            }
 
-
+        } catch(e) {
+            console.log('error：'+str+'!!!'+e);
+            return false;
+        }
+    }
+    console.log('It is not a string!')
+}
 
 </script>
 </body>
