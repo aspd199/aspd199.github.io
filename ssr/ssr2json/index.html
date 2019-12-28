@@ -216,7 +216,7 @@ input.addEventListener('input',function(){
     multiSS(text)
   }else if(text.startsWith('http')){
     http(text)
-  }else if(isBase642(text)){
+  }else if(isBase64(text)){
     subscription(text)
   }else{
     tip1.innerHTML = '请粘贴正确的ssr/ss/base64/订阅地址'
@@ -235,6 +235,7 @@ output.addEventListener('input',function(){
   }else if(isJSON(text)){
     var ssr=JSON.parse(text);
 console.log(ssr.length);
+    
     var result = '';
     for(i=0;i<ssr.length;i++){
         temp = ssr[i].server + ':';
@@ -248,7 +249,8 @@ console.log(ssr.length);
         function(err){
           tip2.innerHTML = 'password encode: '+err;
         });
-        temp += 'obfsparam=' + ssr[i].obfsparam + '&';
+        temp += 'obfsparam=' + (typeof(ssr[i].obfsparam) == 'undefined'?'':ssr[i].obfsparam) + '&';
+        temp += 'protoparam=' + (typeof(ssr[i].protoparam) == 'undefined'?'':ssr[i].protoparam) + '&';
         asyncToBase64(ssr[i].remarks,'utf8',function(data){
           temp += 'remarks=' + data + '&';
         },
@@ -262,7 +264,7 @@ console.log(ssr.length);
           tip2.innerHTML = 'group encode: '+err;
         });
         asyncToBase64(temp,'utf8',function(data){
-          result += 'ssr://' + data.replace(/=/g,'') + '\n';
+          result += 'ssr://' + data.replace(/\//g,'_').replace(/\+/g,'-').replace(/=/g,'') + '\n';
         },
         function(err){
           tip2.innerHTML = 'ssr encode: '+err;
@@ -335,13 +337,13 @@ function multiSS(text){
     if(record[i].startsWith('ssr://')) ssrDecode(record[i])
     else if(record[i].startsWith('ss://')) ssDecode(record[i])
     else {err++;console.log('失败：',i)}
-    }
-
-    tip1.innerHTML = '解析完成!共'+len+'条记录,成功转换'+(len-err)+'条';
-    tip1.classList.remove('error');
-    input.classList.remove('error');
-    input.value = '[' + result.slice(0,result.length-1) + ']'
   }
+
+  tip1.innerHTML = '解析完成!共'+len+'条记录,成功转换'+(len-err)+'条';
+  tip1.classList.remove('error');
+  input.classList.remove('error');
+  input.value = '[' + result.slice(0,result.length-1) + ']'
+}
 
 
 //解码ssr
@@ -349,19 +351,20 @@ function ssrDecode(text){
   text = text.slice(6);
 
   var ip,port,password,group="",obfs="",method="",protocol="",remarks="",protoparam="",obfsparam="",group="",udpport="",uot="";
-  
+  var arr,arr2,arr3
   asyncFromBase64(text,'utf8',function(data){
 
-    var arr = data.split(':');
-    var arr2 = arr[5].split('/?');
-    var arr3 = arr2[1].split('&');
+    arr = data.split(':');
+    arr2 = arr[5].split('/?');
+    arr3 = arr2[1].split('&');
 
     ip=arr[0];
     port=arr[1];
     protocol =arr[2];
     method =arr[3];
     obfs=arr[4];
-    obfsparam=arr2[1].match(/obfsparam=(\S*)&/)[1];
+    obfsparam=arr2[1].match(/obfsparam=(\S*?)&/)[1];
+    protoparam=arr2[1].match(/protoparam=(\S*?)&/)[1];
   },
   function(err){
     tip1.innerHTML = 'ssr decode: '+err;
@@ -372,13 +375,13 @@ function ssrDecode(text){
   function(err){
     tip1.innerHTML = 'password decode: '+err;
   });
-  asyncFromBase64(arr2[1].match(/remarks=(\S*)&/)[1];,'utf8',function(data){
+  asyncFromBase64(arr2[1].match(/remarks=(\S*?)&/)[1],'utf8',function(data){
     remarks=data;
   },
   function(err){
     tip1.innerHTML = 'remarks decode: '+err;
   });
-  asyncFromBase64(arr2[1].match(/group=(\S*)&/)[1],'utf8',function(data){
+  asyncFromBase64(arr2[1].match(/group=(\S*)&*/)[1],'utf8',function(data){
     group=data;
   },
   function(err){
@@ -392,6 +395,7 @@ function ssrDecode(text){
     "obfs": "${obfs}",
     "password": "${password}",
     "obfsparam": "${obfsparam}",
+    "protoparam": "${protoparam}",
     "remarks": "${remarks}",
     "group": "${group}"
   },`;
